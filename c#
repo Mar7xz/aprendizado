@@ -1,0 +1,179 @@
+using System;
+using System.Collections.Generic;
+
+namespace ControleClientes
+{
+    // ==========================================
+    // 1. CLASSE BASE: Cliente (Abstração e Encapsulamento)
+    // ==========================================
+    public abstract class Cliente
+    {
+        // Atributos privados (Encapsulamento)
+        private string nome;
+        private string endereco;
+
+        // Propriedades Públicas para acessar os atributos
+        public string Nome
+        {
+            get { return nome; }
+            set { nome = value; }
+        }
+
+        public string Endereco
+        {
+            get { return endereco; }
+            set { endereco = value; }
+        }
+
+        // Construtor da classe base
+        public Cliente(string nome, string endereco)
+        {
+            this.Nome = nome;
+            this.Endereco = endereco;
+        }
+
+        // Método Abstrato - Cada filho deve rodar o seu (Polimorfismo)
+        public abstract void ExibirDados();
+    }
+
+    // ==========================================
+    // 2. CLASSE FILHA: ClienteFisica (Herança)
+    // ==========================================
+    public class ClienteFisica : Cliente
+    {
+        // Atributo específico
+        public string CPF { get; set; }
+
+        // Construtor chamando a classe base (base)
+        public ClienteFisica(string nome, string endereco, string cpf) 
+            : base(nome, endereco)
+        {
+            this.CPF = cpf;
+        }
+
+        // Sobrescrita de Método (Polimorfismo)
+        public override void ExibirDados()
+        {
+            Console.WriteLine("\n--- DADOS DO CLIENTE (PESSOA FÍSICA) ---");
+            Console.WriteLine($"Nome: {Nome}");
+            Console.WriteLine($"Endereço: {Endereco}");
+            Console.WriteLine($"CPF: {CPF}");
+        }
+    }
+
+    // ==========================================
+    // 3. CLASSE FILHA: ClienteJuridica (Herança)
+    // ==========================================
+    public class ClienteJuridica : Cliente
+    {
+        // Atributo específico
+        public string CNPJ { get; set; }
+
+        // Construtor chamando a classe base (base)
+        public class ClienteJuridica(string nome, string endereco, string cnpj) 
+            : base(nome, endereco)
+        {
+            this.CNPJ = cnpj;
+        }
+
+        // Sobrescrita de Método (Polimorfismo)
+        public override void ExibirDados()
+        {
+            Console.WriteLine("\n--- DADOS DO CLIENTE (PESSOA JURÍDICA) ---");
+            Console.WriteLine($"Razão Social: {Nome}");
+            Console.WriteLine($"Endereço: {Endereco}");
+            Console.WriteLine($"CNPJ: {CNPJ}");
+        }
+    }
+
+    // ==========================================
+    // 4. PROGRAMA PRINCIPAL (Execução e Testes)
+    // ==========================================
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            // Lista para guardar todos os clientes (Polimorfismo na prática)
+            List<Cliente> listaClientes = new List<Cliente>();
+            
+            string opcao = "";
+
+            // Estrutura de repetição para o menu do sistema
+            while (opcao != "3")
+            {
+                Console.WriteLine("\n=================================");
+                Console.WriteLine("  SISTEMA DE CONTROLE DE CLIENTES ");
+                Console.WriteLine("=================================");
+                Console.WriteLine("1 - Cadastrar Pessoa Física");
+                Console.WriteLine("2 - Cadastrar Pessoa Jurídica");
+                Console.WriteLine("3 - Sair e Exibir Relatório");
+                Console.Write("Escolha uma opção: ");
+                opcao = Console.ReadLine();
+
+                // Estrutura condicional para validar a escolha
+                if (opcao == "1")
+                {
+                    // Entrada e saída de dados
+                    Console.Write("Digite o nome: ");
+                    string nome = Console.ReadLine();
+                    Console.Write("Digite o endereço: ");
+                    string endereco = Console.ReadLine();
+                    Console.Write("Digite o CPF: ");
+                    string cpf = Console.ReadLine();
+
+                    // Instanciação do objeto e adição na lista
+                    ClienteFisica pf = new ClienteFisica(nome, endereco, cpf);
+                    listaClientes.Add(pf);
+                    Console.WriteLine("Cliente Pessoa Física cadastrado com sucesso!");
+                }
+                else if (opcao == "2")
+                {
+                    Console.Write("Digite a Razão Social: ");
+                    string nome = Console.ReadLine();
+                    Console.Write("Digite o endereço: ");
+                    string endereco = Console.ReadLine();
+                    Console.Write("Digite o CNPJ: ");
+                    string cnpj = Console.ReadLine();
+
+                    // Instanciação do objeto e adição na lista
+                    ClienteJuridica pj = new ClienteJuridica(nome, endereco, cnpj);
+                    listaClientes.Add(pj);
+                    Console.WriteLine("Cliente Pessoa Jurídica cadastrado com sucesso!");
+                }
+                else if (opcao == "3")
+                {
+                    Console.WriteLine("\nSaindo do sistema...");
+                }
+                else
+                {
+                    Console.WriteLine("Opção inválida! Tente novamente.");
+                }
+            }
+
+            // Operador Relacional e Lógico para mostrar o relatório final
+            if (listaClientes.Count > 0)
+            {
+                Console.WriteLine("\n=================================");
+                Console.WriteLine("      RELATÓRIO DE CLIENTES      ");
+                Console.WriteLine("=================================");
+                
+                // Estrutura de repetição para percorrer a lista
+                foreach (Cliente c in listaClientes)
+                {
+                    // Polimorfismo: o sistema sabe sozinho qual método chamar
+                    c.ExibirDados(); 
+                }
+                
+                // Operador aritmético simples apenas para exibir o total
+                Console.WriteLine($"\nTotal de clientes cadastrados: {listaClientes.Count}");
+            }
+            else
+            {
+                Console.WriteLine("\nNenhum cliente foi cadastrado.");
+            }
+
+            Console.WriteLine("\nPrograma finalizado. Pressione qualquer tecla para fechar.");
+            Console.ReadKey();
+        }
+    }
+}
