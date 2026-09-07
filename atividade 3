@@ -1,0 +1,24 @@
+using Microsoft.AspNetCore.Mvc;
+using LHPets.Models;
+using System.Collections.Generic;
+
+namespace LHPets.Controllers
+{
+    public class ClientesController : Controller
+    {
+        // Rota: /Clientes ou /Clientes/Index
+        // O Controller busca a lista no modelo e envia para a View
+        public IActionResult Index()
+        {
+            // Simulando uma busca na fonte de dados (Model)
+            List<Cliente> lista = new List<Cliente>
+            {
+                new Cliente { Id = 1, Nome = "Roberto Souza", CpfCnpj = "123.456.789-00", Email = "roberto@email.com", NomePet = "Rex" },
+                new Cliente { Id = 2, Nome = "Clínica Veterinária LH", CpfCnpj = "12.345.678/0001-99", Email = "contato@lh.com", NomePet = "Miau" }
+            };
+
+            // Retorna a View passando os dados que ela deve renderizar
+            return View(lista);
+        }
+    }
+}
