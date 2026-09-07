@@ -1,0 +1,38 @@
+-- 1. Criação do Banco de Dados
+CREATE DATABASE ClinicaMedica;
+GO
+
+-- 2. Seleciona o banco para garantir que as tabelas fiquem no lugar certo
+USE ClinicaMedica;
+GO
+
+-- 3. Criação da tabela de Médicos
+CREATE TABLE Medico (
+    IdMedico INT IDENTITY(1,1) PRIMARY KEY, -- Chave Primária com auto-incremento
+    Nome VARCHAR(100) NOT NULL,
+    CRM VARCHAR(20) NOT NULL UNIQUE,
+    Especialidade VARCHAR(50) NOT NULL
+);
+
+-- 4. Criação da tabela de Pacientes
+CREATE TABLE Paciente (
+    IdPaciente INT IDENTITY(1,1) PRIMARY KEY,
+    Nome VARCHAR(100) NOT NULL,
+    CPF VARCHAR(14) NOT NULL UNIQUE,
+    DataNascimento DATE NOT NULL,
+    Telefone VARCHAR(20)
+);
+
+-- 5. Criação da tabela de Consultas (Tabela de Relacionamento)
+CREATE TABLE Consulta (
+    IdConsulta INT IDENTITY(1,1) PRIMARY KEY,
+    IdMedico INT NOT NULL,
+    IdPaciente INT NOT NULL,
+    DataHora DATETIME NOT NULL,
+    Diagnostico VARCHAR(500),
+    
+    -- Configuração das Chaves Estrangeiras (Foreign Keys)
+    CONSTRAINT FK_Consulta_Medico FOREIGN KEY (IdMedico) REFERENCES Medico(IdMedico),
+    CONSTRAINT FK_Consulta_Paciente FOREIGN KEY (IdPaciente) REFERENCES Paciente(IdPaciente)
+);
+GO
